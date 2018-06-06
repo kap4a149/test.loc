@@ -44,7 +44,7 @@ foreach($html->find('.searchheadline > a') as $element){
 
 
   // Парсинг и запись даты в базу данных
-  foreach($html->find('.time-wrapper') as $element){
+  foreach($html->find('p.categorydate > span.time-wrapper') as $element){
     $stmt = $db->prepare('INSERT INTO aqq VALUES(:link)');
       $stmt->bindParam(':link', $element);
       $stmt->execute();
