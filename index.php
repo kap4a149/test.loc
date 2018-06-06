@@ -4,50 +4,57 @@ error_reporting(E_ALL);
 
 include_once 'core1/simple_html_dom.php';
 
-// include 'core/parser.php';
-// include 'core/db.php';
-
-
-// parseNewsFullText('https://dailyillini.com/showcase/2018/06/04/urbanas-muslim-american-society-calls-for-community-education-at-9th-annual-ramadan-dinner/');
-
-$db = new PDO('mysql:host=localhost;dbname=news;charset=utf8', 'service', '12345');
-
 $html = file_get_html('https://dailyillini.com/news/');
 
+$title = array();
+$images = array();
+$date = array();
 
-//Парсинг и запись ссылок в базу данных
+
+
+//parse links and add it to array
 foreach($html->find('.searchheadline > a') as $element){
-  $stmt = $db->prepare('INSERT INTO aqq VALUES(:link)');
-  $stmt->bindParam(':link', $element);
-  $stmt->execute();
+  $link_id++;
+  $title[$link_id] = $element;
   }
 
-// Парсинг и запись картинок в базу данных
+//parse images an add it to array
   foreach($html->find('.categoryimage') as $element){
   $i++;
   $image_id = "images/image$i.png";
   //check file type
   if(stristr($element->src, '.jpg') == TRUE){
     copy("$element->src", $image_id);
-    $stmt = $db->prepare('INSERT INTO aqq VALUES(:image)');
-    $stmt->bindParam(':image', $image_id);
-    $stmt->execute();
+    $images[$i] = $image_id;
   }
 
   if(stristr($element->src, '.png') == TRUE){
     copy("$element->src", $image_id);
-    $stmt = $db->prepare('INSERT INTO aqq VALUES(:image)');
-    $stmt->bindParam(':image', $image_id);
-    $stmt->execute();
+    $images[$i] = $image_id;
   }
   }
 
 
-  // Парсинг и запись даты в базу данных
+  // parse date and add it to array
   foreach($html->find('p.categorydate > span.time-wrapper') as $element){
-    $stmt = $db->prepare('INSERT INTO aqq VALUES(:link)');
-      $stmt->bindParam(':link', $element);
-      $stmt->execute();
+    $date_id++;
+    $date[$date_id] = $element;
   }
+
+  function insertValuesIntoSql(){
+    global $title;
+    global $images;
+    global $date;
+    $db = new PDO('mysql:host=localhost;dbname=news;charset=utf8', 'root', '');
+    for($i = 1; $i<count($title); $i++){
+    $stmt = $db->prepare("INSERT INTO parsenews (title, date, image) VALUES (:title, :date, :image)");
+    $stmt->bindParam(':title', $title[$i]);
+    $stmt->bindParam(':date', $date[$i]);
+    $stmt->bindParam(':image', $images[$i]);
+    $stmt->execute();
+    }
+  }
+
+  insertValuesIntoSql();
 
 ?>
