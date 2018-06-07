@@ -5,17 +5,22 @@ error_reporting(E_ALL);
 
 include_once 'core/parser.php';
 
+include_once 'pages/news.php';
 
-// parsePo0000stLinks();
 
-// parsePostImages();
+// getParsedLastThreeNews();
 
-parsePostDate();
-
-// parseFullText(); 
-
-// when all data has been parsed, write this in database
-insertValuesIntoSql();
+// parsePostLinks();
+parsePostImages();
+//
+// parsePostDate();
+//
+// parseFullText();
+//
+// // when all data has been parsed, write this in database
+insertParseDataIntoSql();
+//
+getParsedLastThreeNews();
 
 
 
