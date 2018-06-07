@@ -61,9 +61,8 @@ function parseFullText(){
   global $title;
   for($id_full = 1; $id_full<= count($title); $id_full++){
   $html = file_get_html($title[$id_full]->href);
-  foreach($html->find('p > span') as $element){
-  // foreach($html->find('span.storycontent') as $element){
-
+  // foreach($html->find('p > span') as $element){
+  foreach($html->find('span.storycontent') as $element){
   // foreach($html->find('span.storycontent > p') as $element){
     $full_text[$id_full] = $element;
   }
