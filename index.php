@@ -6,13 +6,13 @@ error_reporting(E_ALL);
 include_once 'core/parser.php';
 
 
-parsePostLinks();
+// parsePo0000stLinks();
 
-parsePostImages();
+// parsePostImages();
 
 parsePostDate();
 
-parseFullText();
+// parseFullText(); 
 
 // when all data has been parsed, write this in database
 insertValuesIntoSql();

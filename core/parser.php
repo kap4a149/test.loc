@@ -43,7 +43,7 @@ function parsePostDate(){
   global $html;
   foreach($html->find('p.categorydate > span.time-wrapper') as $element){
       $date_id++;
-      $date[$date_id] = $element;
+      $date[$date_id] = $element->innertext;
     }
     return $date;
 }
@@ -53,7 +53,7 @@ function parseFullText(){
   global $title;
   for($id_full = 1; $id_full<= count($title); $id_full++){
   $html = file_get_html($title[$id_full]->href);
-  foreach($html->find('div > span > p') as $element){
+  foreach($html->find('span.storycontent > p') as $element){
     $full_text[$id_full] = $element;
   }
 }
