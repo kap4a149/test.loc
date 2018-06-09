@@ -6,7 +6,7 @@ include 'db.php';
 $html = file_get_html('https://dailyillini.com/news/');
 
 $title = parsePostLinks();
-var_dump($title); die;
+$news_name = parseNewsName();
 $images = parsePostImages();
 $date = parsePostDate();
 $full_text = parseFullText();
@@ -15,12 +15,19 @@ $full_text = parseFullText();
 function parsePostLinks(){
   global $html;
   foreach($html->find('.searchheadline > a') as $element){
-    $link_id++;
-    $title[$link_id] = $element->innertext;
+    $title[] = file_get_html($element->href);
     }
     return $title;
 }
 
+
+function parseNewsName(){
+  global $html;
+  foreach($html->find('h2 > a') as $element){
+    $news_name[] = $element->plaintext;
+    }
+    return $news_name;
+}
 
 function parsePostImages(){
   global $html;
@@ -31,17 +38,17 @@ function parsePostImages(){
     //JPG
     if(stristr($element->src, '.jpg') == TRUE){
       copy("$element->src", $image_id . '.jpg');
-      $images[$i] = $image_id . '.jpg';
+      $images[] = $image_id . '.jpg';
     }
     //PNG
     if(stristr($element->src, '.png') == TRUE){
       copy("$element->src", $image_id . '.png');
-      $images[$i] = $image_id . '.png';
+      $images[] = $image_id . '.png';
     }
     //JPEG
     if(stristr($element->src, '.jpeg') == TRUE){
       copy("$element->src", $image_id . '.jpeg');
-      $images[$i] = $image_id . '.jpeg';
+      $images[] = $image_id . '.jpeg';
     }
     }
     return $images;
@@ -51,22 +58,26 @@ function parsePostImages(){
 function parsePostDate(){
   global $html;
   foreach($html->find('p.categorydate > span.time-wrapper') as $element){
-      $date_id++;
-      $date[$date_id] = $element;
+      $formatedDate = str_replace(',', '', $element->plaintext);
+      $newdate = date('Y-m-d', strtotime($element->plaintext));
+      $date[] = $newdate;
     }
     return $date;
 }
 
-
 function parseFullText(){
   global $title;
-  for($id_full = 1; $id_full<= count($title); $id_full++){
-  $html = file_get_html($title[$id_full]->href);
-  foreach($html->find('span.storycontent') as $element){
-    $full_text[$id_full] = $element;
+  for($i = 0; $i < count($title); $i++){
+  foreach($title[$i]->find('p > span') as $element){
+    $full_text[] = $element->plaintext;
   }
 }
 return $full_text;
 }
+
+// echo count($news_name) . '<br />';
+// echo count($date) . '<br />';
+// echo count($images) . '<br />';
+// echo count($news_name) . '<br />';
 
 ?>
