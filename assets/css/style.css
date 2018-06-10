@@ -1,0 +1,33 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.newsName{
+  font-size: 1.6em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.newsDate{
+  font-style: italic;
+  text-align: center;
+}
+
+.newsImage{
+  width: 370px;
+  height: 370px;
+  border-radius: 13px;
+  margin-left: 36%;
+}
+
+.content{
+  width: 80%;
+  margin-left: 10%;
+  text-align: justify;
+  padding-bottom: 10%;
+}
+
+.content:last-child{
+  padding-bottom: 2%;
+}

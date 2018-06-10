@@ -32,25 +32,14 @@ function parseNewsName(){
 function parsePostImages(){
   global $html;
   foreach($html->find('.categoryimage') as $element){
-    $i++;
-    $image_id = "images/image$i";
+    $img_id = mt_rand();
+    $image_id = "images/image$img_id.jpeg";
     //check file type
-    //JPG
-    if(stristr($element->src, '.jpg') == TRUE){
-      copy("$element->src", $image_id . '.jpg');
-      $images[] = $image_id . '.jpg';
+    if(preg_match('(jpg|png|jpeg)', $element->src)){
+    copy("$element->src", $image_id);
+    $images[] = $image_id;
     }
-    //PNG
-    if(stristr($element->src, '.png') == TRUE){
-      copy("$element->src", $image_id . '.png');
-      $images[] = $image_id . '.png';
-    }
-    //JPEG
-    if(stristr($element->src, '.jpeg') == TRUE){
-      copy("$element->src", $image_id . '.jpeg');
-      $images[] = $image_id . '.jpeg';
-    }
-    }
+  }
     return $images;
 }
 
@@ -68,16 +57,11 @@ function parsePostDate(){
 function parseFullText(){
   global $title;
   for($i = 0; $i < count($title); $i++){
-  foreach($title[$i]->find('p > span') as $element){
+  foreach($title[$i]->find('span.storycontent') as $element){
     $full_text[] = $element->plaintext;
   }
 }
 return $full_text;
 }
-
-// echo count($news_name) . '<br />';
-// echo count($date) . '<br />';
-// echo count($images) . '<br />';
-// echo count($news_name) . '<br />';
 
 ?>
